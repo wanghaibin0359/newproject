@@ -14,7 +14,10 @@
         <router-link to='seller' tag="a">商家</router-link>
        </div>
     </div>
-    <router-view ></router-view>
+      <router-view ></router-view>
+    <div class="shopbar">
+
+    </div>
   </div>
 </template>
 <script>
@@ -38,6 +41,9 @@ import allAction from 'src/common/allAction/allAction';
         self.getgoods = self.$store.state.goods = res[0].data;
         self.getsellers = self.$store.state.seller = res[1].data;
         self.getratings = self.$store.state.ratings = res[2].data;
+         this.$nextTick(() => {
+           this.$router.push('/goods');
+         })
       }).catch((rej) => {
         this.$openBox('商品请求报错！');
       });
@@ -58,11 +64,9 @@ import allAction from 'src/common/allAction/allAction';
     },
     mounted () {
       console.log(window.devicePixelRatio)
-      this.$router.push('/goods');
     },
     watch: {
       getgoods (news) {
-
       },
       getsellers (news) {
 
@@ -90,6 +94,7 @@ import allAction from 'src/common/allAction/allAction';
   @no-click:rgb(240,20,20);
   #app{
    .tab{
+     position: relative;
       display:flex;
       width:100%;
       flex-wrap:wrap;
@@ -112,6 +117,14 @@ import allAction from 'src/common/allAction/allAction';
        }
      }
 
+    }
+
+    .shopbar{
+      position: absolute;
+      bottom:0;
+      height:46px;
+      background-color:red;
+      width:100%;
     }
   }
 </style>

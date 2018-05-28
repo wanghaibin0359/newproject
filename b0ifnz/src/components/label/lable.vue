@@ -1,7 +1,8 @@
 <template>
 <div>
-	<div v-if="size===1" :class="classMap[datas]"></div>
-	<div v-else :class="classMap2[datas]"></div>
+	<div class="classMap" v-if="size===1":class="classMap[datas]"></div>
+	<div class="classMap1" v-if="size===2" :class="classMap2[datas]"></div>
+  <div class="classMap2" v-if="size===3" :class="classMap3[datas]"></div>
 </div>
 </template>
 <script>
@@ -10,7 +11,8 @@
 		data() {
 			return {
 				classMap: this.$store.state.classMap,
-				classMap2: this.$store.state.classMap2
+				classMap2: this.$store.state.classMap2,
+        classMap3: this.$store.state.classMap3
 			}
 		},
 		props: ['datas', 'size']
@@ -22,6 +24,18 @@ div{
 	width:100%;
 	height: 100%;
 	background-size: 100% 100%;
+  .classMap{
+    width:12px;
+    height: 12px;
+  }
+  .classMap1{
+    width:16px;
+    height: 16px;
+  }
+  .classMap2{
+    width:12px;
+    height: 12px;
+  }
 	.decrease{
 		.bgcimg('../components/header/decrease_1@');
 	}
@@ -52,5 +66,20 @@ div{
 	.guarantee2{
 		.bgcimg('../components/header/guarantee_2@');
 	}
+  .decrease3{
+    .bgcimg('../components/goods/decrease_3@');
+  }
+  .discount3{
+    .bgcimg('../components/goods/discount_3@');
+  }
+  .special3{
+    .bgcimg('../components/goods/special_3@');
+  }
+  .invoice3{
+    .bgcimg('../components/goods/invoice_3@');
+  }
+  .guarantee3{
+    .bgcimg('../components/goods/guarantee_3@');
+  }
 }
 </style>

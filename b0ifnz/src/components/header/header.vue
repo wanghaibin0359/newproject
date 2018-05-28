@@ -7,53 +7,89 @@
 			<div class="content-auto inline-block">
 				<div class="title">
 					<span class="sign">
-          			</span>
+          </span>
 					<span class="sellername">{{getsellers.name}}</span>
 				</div>
 				<div class="arrivalTime">
 					{{getsellers.description}}/{{getsellers.deliveryTime}}分到达
 				</div>
 				<div class="spacilOffer">
-					<span v-show='description' class="sign inline-block">
+					<span v-show='description' class="inline-block sign">
 						<lable 	:datas="description?description[0].type:0" :size='1'></lable>
 					</span>
 					<span class="info inline-block">{{description?description[0].description:''}}</span>
 				</div>
 			</div>
-			<div class="clickbtn">
-				<span>5个</span>
-				<span @click="clickPopShow" class="icon-keyboard_arrow_right"></span>
+			<div @click="clickPopShow" class="clickbtn">
+				<span>{{description?description.length:0}}个</span>
+				<span  class="icon-keyboard_arrow_right"></span>
 			</div>
 		</div>
 		<div class="bulletin" @click="clickPopShow">
 			<div class="bulletin_wrapper">
 				<span class="bulletin_img"></span>
 				<span class="bulletin_content">{{getsellers.bulletin}}</span>
-				<span class="bulletin_arrow icon-keyboard_arrow_right"></span>
+				<i class="bulletin_arrow icon-keyboard_arrow_right"></i>
 			</div>
 		</div>
 		<div class="bgcImg">
 			<img  :src="getsellers.avatar" alt="" >
 		</div>
-    <transition name="fade">
-      <div class="popPage" v-show="popUp" transition="popPage">
-      	<div class="title">
-      		<span class="sellername">{{getsellers.name}}</span>
-      		<div class="star" v-show="getsellers">
-	      		<ul class="starul">
-	      			<li class="starli" v-for='item in starArray' ><star :starclass="item"></star></li>
-				</ul>
-			</div>
-      	</div>
-        <div class="closebtn icon-close"  @click="clickClosePage"></div>
-      </div>
+    <transition name="fade" >
+        <div   class="popPage" v-show="popUp" ref="fades">
+            <div class="detail-wrapper">
+              <div class="wrap">
+                <div class="title">
+                  <span class="sellername">{{getsellers.name}}</span>
+                  <div class="star" v-show="getsellers">
+                    <ul class="starul">
+                      <li class="starli" v-for='item in starArray' ><star :starclass="item"></star></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="fadeWarp">
+                  <div class="discounts">
+                    <div class="ctitle">
+                      <div class="line"></div>
+                      <div class="content">优惠信息</div>
+                      <div class="line"></div>
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li v-show="description" v-for="item in description" class="discountItem">
+                            <span  class="inline-block"><lable 	:datas="item.type" :size='2'></lable></span>
+                          <span class="info inline-block">{{item.description}}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="notice">
+                    <div class="ctitle">
+                      <div class="line"></div>
+                      <div class="content">商家公告</div>
+                      <div class="line"></div>
+                    </div>
+                    <div class="content">{{getsellers.bulletin}}</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <i class="closebtn icon-close"  @click="clickClosePage"></i>
+            </div>
+
+        </div>
+
     </transition>
 	</div>
 </template>
 <script>
+import BScroll from 'better-scroll';
 import lable from '../label/lable.vue';
 import star from '../star/star.vue';
+
 import {getStarArray} from 'src/common/util/computedStar';
+
 	const STARSIZE = 3;
 	const STARCOUNT = 5;
 	export default {
@@ -82,13 +118,28 @@ import {getStarArray} from 'src/common/util/computedStar';
 			}
 		},
 		methods: {
-		clickPopShow () {
-			this.popUp = true;
+      clickPopShow () {
+        this.popUp = true;
+        this.$nextTick(() => {
+           this.betterscroll.refresh();
+          this.betterscroll.scrollTo(0, 0, 100, 'linear');
+        })
+      },
+      clickClosePage () {
+        this.popUp = false;
+      }
 		},
-		clickClosePage () {
-			this.popUp = false;
-		}
-		}
+    mounted () {
+       this.$nextTick(() => {
+        this.betterscroll = new BScroll(this.$refs.fades, {
+          click: true,
+          startY: 0
+        });
+        this.betterscroll.on('scroll', (pos) => {
+          console.log(pos.x + '~' + pos.y)
+        })
+      })
+    }
 	};
 </script>
 <style lang="less" rel="stylesheet/less">
@@ -100,6 +151,13 @@ import {getStarArray} from 'src/common/util/computedStar';
     background-color: rgba(7,17,27,.5);
     overflow: hidden;
     .popPage{
+      position:fixed;
+     /* overflow: auto;*/
+      top:0;
+      left:0;
+      z-index: 100;
+      width:100%;
+      height: 100%;
       &.fade-enter-active{
         transition: all .5s;
       }
@@ -107,48 +165,117 @@ import {getStarArray} from 'src/common/util/computedStar';
         opacity: 0;
         transition: all .5s;
       }
-      position:fixed;
-      top:0;
-      left:0;
-      z-index: 100;
-      width:100%;
-      height: 100%;
       background-color:rgba(7,17,27,.8);
-      .title{
-      	 margin:64px 0 28px 0;
-      	text-align: center;
-			.sellername{
-				display: inline-block;
-				 font-size:18px;
-				font-weight: 700;
-				color:rgb(255,255,255);
-				line-height: 18px;
-				margin-bottom: 18px; 
-			}
-			.star{
-				text-align: center;
-				.starul{
-					display: inline-block;
-					overflow: hidden;
-					.starli{
-						float:left;
-						width:20px;
-						height: 19px;
-						margin-right: 20px;
-					}
-				}
-			}
-		}
-      .closebtn{
-        position:absolute;
-        left:50%;
-        bottom:32px;
-        transform: translateX(-50%);
-        font-size: 32px;
-        width:32px;
-        height: 32px;
-        color:rgba(255,255,255,.5);
-      }
+     .detail-wrapper{
+       min-height: 100%;
+       position: relative;
+       box-sizing: border-box;
+       padding-bottom: 70px;
+       .wrap{
+         height: 100%;
+
+         .title{
+           padding:64px 0 28px 0;
+           text-align: center;
+           .sellername{
+             display: inline-block;
+             font-size:18px;
+             font-weight: 700;
+             color:rgb(255,255,255);
+             line-height: 18px;
+             margin-bottom: 18px;
+           }
+           .star{
+             text-align: center;
+             .starul{
+               display: inline-block;
+               overflow: hidden;
+               .starli{
+                 float:left;
+                 width:20px;
+                 height: 19px;
+                 margin-right: 20px;
+               }
+             }
+           }
+         }
+
+         .fadeWarp{
+           padding-bottom: 70px;
+           width:100%;
+           color:rgb(255,255,255);
+           .discounts,.notice{
+             max-width: 100%;
+             margin: 0 12px 28px;
+             .ctitle{
+               display: flex;
+               margin-bottom: 24px;
+               .content{
+                 diplay:inline-block;
+                 flex:0 1 auto;
+                 padding: 0 12px;
+                 font-size:14px;
+
+                 font-weight: 700;
+                 line-height: 14px;
+               }
+               .line{
+                 flex: 1 0 auto;
+                 margin-top: 6px;
+                 border-top: 2px solid rgba(255, 255, 255, 0.2);
+
+               }
+             }
+             .content{
+               padding: 0px 12px;
+             }
+           }
+           .discounts{
+             .content{
+               .discountItem{
+                 margin-bottom: 12px;
+                 span{
+                   vertical-align: top;
+                   display:inline-block;
+
+                 }
+
+                 .signIcon{
+                   width:16px;
+                   height: 16px;
+                 }
+                 .info{
+                   margin-left:6px;
+                   font-size:12px;
+                   font-weight:400;
+                   line-height:16px;
+                 }
+               }
+             }
+           }
+           .notice{
+             .content{
+               font-size:12px;
+               font-weight:400;
+               line-height:24px;
+             }
+           }
+         }
+       }
+       .closebtn{
+         display: block;
+         position:absolute;
+         left: 50%;
+         transform: translateX(-50%);
+         bottom:32px;
+         font-size: 32px;
+         width:32px;
+         height: 32px;
+         color:rgba(255,255,255,.5);
+       }
+     }
+
+
     }
 	  .bgcImg{
 		position: absolute;
@@ -196,7 +323,7 @@ import {getStarArray} from 'src/common/util/computedStar';
             display: inline-block;
             width:30px;
             height:18px;
-          
+
           } */
           .sellername{
             display: inline-block;
@@ -222,10 +349,6 @@ import {getStarArray} from 'src/common/util/computedStar';
 
           .sign{
           	 margin-right:4px;
-			 .bgcimg('../components/header/decrease_1@');
-			 background-size:12px 12px;
-          	width:12px;
-          	height:12px;
           }
           .info{
           	 font-size:12px;
@@ -238,6 +361,7 @@ import {getStarArray} from 'src/common/util/computedStar';
         display:inline-block;
       }
       .content-left{
+        height: 64px;
           img{
             border-radius: 2px;
           }

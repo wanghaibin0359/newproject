@@ -19,9 +19,6 @@ const router = {
 		},
 		{path: '/seller',
 			component: seller
-		},
-		{path: '/',
-			component: goods
 		}]
 	}
 export default router;

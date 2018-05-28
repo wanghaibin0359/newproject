@@ -2,16 +2,17 @@
   &::after{
     content: "";
     width:100%;
-
-    border-bottom:@arguments;
-    @media screen and (-webkit-min-device-pixel-ratio:1.5),
-    only screen and (min-device-pixel-ratio:2){
-      transition: scaleY(0.7);
-    }
-    @media screen and (-webkit-min-device-pixel-ratio:2),
-    only screen and (min-device-pixel-ratio:2){
-      transition: scaleY(0.5);
-    }
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: @arguments;
   }
 }
-
+.border-none(){
+  &::after{
+    content: "";
+    border:none;
+  }
+}

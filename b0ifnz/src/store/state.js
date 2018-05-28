@@ -10,5 +10,6 @@ export default {
   'seller': {},
   'ratings': {},
   'classMap': ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
-  'classMap2': ['decrease2', 'discount2', 'special2', 'invoice2', 'guarantee2']
+  'classMap2': ['decrease2', 'discount2', 'special2', 'invoice2', 'guarantee2'],
+  'classMap3': ['decrease3', 'discount3', 'special3', 'invoice3', 'guarantee3']
 }
