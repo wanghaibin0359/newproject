@@ -29,10 +29,13 @@
                       <span class="sellCount">月售{{i.sellCount}}份</span><span class="sellCount">好评率{{i.sellCount}}</span>
                     </div>
                     <div class="priceall">
-                      <span class="price">￥{{i.price}}</span>
-                      <span v-if="i.oldPrice" class="oldPrice">￥{{i.oldPrice}}</span>
+                      <span class="now">￥{{i.price}}</span>
+                      <span v-show="i.oldPrice" class="old">￥{{i.oldPrice}}</span>
                     </div>
                   </div>
+                </div>
+                <div class="cartwrapper">
+                  <cartcontrol :foods="i"></cartcontrol>
                 </div>
               </li>
             </ul>
@@ -47,9 +50,10 @@
 <script>
   import BScroll from 'better-scroll';
   import lable from '../label/lable.vue';
+  import cartcontrol from '../cartcontrol/cartcontrol.vue';
 //  const ERRORS = 0;
 	export default {
-    components: {lable},
+    components: {lable, cartcontrol},
 		name: 'goods',
     data () {
       return {
@@ -158,7 +162,7 @@
       flex:0 0 80px;
       ul{
         .fooditem{
-          .border-1px(1px,solid,rgba(7,17,27,0.1));
+
           text-align: left;
           width:56px;
           padding: 0 12px;
@@ -170,7 +174,7 @@
           font-weight: 200;
           line-height: 14px;
           &.current{
-            
+
             position: relative;
             font-size: 12px;
             color:rgb(240,20,20);
@@ -179,14 +183,17 @@
             z-index: 10;
             font-weight: 700;
             background-color: #fff;
-            .border-none();
+            .icon{
+              .border-none();
+            }
+
           }
           span{
             display: inline-block;
           }
           .icon{
             text-align: center;
-            
+            .border-1px(1px,solid,rgba(7,17,27,0.1));
             position: relative;
             display: table-cell;
             vertical-align: middle;
@@ -204,6 +211,7 @@
 
     }
     .content{
+
       flex:1 1 auto;
       .type{
         margin-bottom: 18px;
@@ -221,19 +229,65 @@
           }
         }
         .foods{
+          padding:0 18px;
           .foodlis{
-
-               .content{
+            position: relative;
+            padding: 18px 0;
+            .border-1px(1px,solid,rgba(7,17,27,0.1));
+            .cartwrapper{
+              position: absolute;
+              bottom: 16px;
+              right:0;
+            }
+             .content{
+               display: flex;
                position: relative;
-                margin:18px;
-              .border-1px(1px,solid,rgba(7,17,27,0.1));
               .img,.contentRight{
                 display:inline-block;
-                vertical-align: top;  
-              
+                vertical-align: top;
               }
+                 .img{
+                   flex:0 0 57px;
+                 }
+                 .contentRight{
+                   flex:1 ;
+                 }
+               .contentRight{
+                 margin-left: 10px;
+                 .title{
+                   margin: 2px 0 8px 0;
+                   font-size:14px;
+                   color:rgb(7,17,28);
+                   line-height: 14px;
+                 }
+                 .description,.sellAndRating{
+                   margin: 8px 0;
+                   font-size:10px;
+                   color:rgb(147,153,159);
+                   line-height: 10px;
+                 }
+                 .sellAndRating{
+                   .sellCount{
+                     margin-right: 12px;
+                   }
+                 }
+                 .priceall{
+                   .now{
+                     margin-right: 8px;
+                     font-size: 14px;
+                     color: rgb(240, 20, 20) ;
+                   }
+                   .old{
+                     text-decoration: line-through;
+                     font-size: 10px;
+                     color: rgb(147, 153, 159);
+                   }
+                 }
+
+
+               }
             }
-         
+
           }
         }
       }
