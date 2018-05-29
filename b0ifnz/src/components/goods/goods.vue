@@ -17,20 +17,22 @@
           <div class="titleName"><span>{{item.name}}</span></div>
           <div class="foods">
             <ul>
-              <li v-for="i in item.foods">
+              <li v-for="i in item.foods" class='foodlis'>
                 <div class="content">
                   <div class="img">
-                    <img :src="i.icon" alt="">
+                    <img :src="i.icon" alt="" width="57" height="57">
                   </div>
-                  <span class="title">{{i.name}}</span>
-                  <span class="description">{{i.description}}</span>
-                  <span class="sellAndRating">
-                    <span class="sellCount">月售{{i.sellCount}}份</span><span class="sellCount">好评率{{i.sellCount}}</span>
-                  </span>
-                  <span class="priceall">
-                    <span class="price">￥{{i.price}}</span>
-                    <span v-if="i.oldPrice" class="oldPrice">￥{{i.oldPrice}}</span>
-                  </span>
+                  <div class="contentRight">
+                    <h2 class="title">{{i.name}}</h2>
+                    <div class="description">{{i.description}}</div>
+                    <div class="sellAndRating">
+                      <span class="sellCount">月售{{i.sellCount}}份</span><span class="sellCount">好评率{{i.sellCount}}</span>
+                    </div>
+                    <div class="priceall">
+                      <span class="price">￥{{i.price}}</span>
+                      <span v-if="i.oldPrice" class="oldPrice">￥{{i.oldPrice}}</span>
+                    </div>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -157,17 +159,6 @@
       ul{
         .fooditem{
           .border-1px(1px,solid,rgba(7,17,27,0.1));
-          &.current{
-            position: relative;
-            font-size: 12px;
-            color:rgb(240,20,20);
-            line-height: 14px;
-            margin-top:-1px;
-            z-index: 10;
-            font-weight: 700;
-            background-color: #fff;
-            .border-none();
-          }
           text-align: left;
           width:56px;
           padding: 0 12px;
@@ -178,11 +169,24 @@
           color:#4d555d;
           font-weight: 200;
           line-height: 14px;
-
+          &.current{
+            
+            position: relative;
+            font-size: 12px;
+            color:rgb(240,20,20);
+            line-height: 14px;
+            margin-top:-1px;
+            z-index: 10;
+            font-weight: 700;
+            background-color: #fff;
+            .border-none();
+          }
           span{
             display: inline-block;
           }
           .icon{
+            text-align: center;
+            
             position: relative;
             display: table-cell;
             vertical-align: middle;
@@ -214,6 +218,22 @@
             font-size: 12px ;
             color:rgb(147,153,159);
             line-height: 26px;
+          }
+        }
+        .foods{
+          .foodlis{
+
+               .content{
+               position: relative;
+                margin:18px;
+              .border-1px(1px,solid,rgba(7,17,27,0.1));
+              .img,.contentRight{
+                display:inline-block;
+                vertical-align: top;  
+              
+              }
+            }
+         
           }
         }
       }
