@@ -128,20 +128,11 @@
     },
     watch: {
       foods(news, old) {
-       /* console.log(this.$refs.ul.children)
-        console.log(this.$refs.ul.clientHeight)*/
-        // 偶尔出现ul的高度意外变小，导致scroll只能滚动一半，是因为DOM过长，
         this.$nextTick().then(() => {
-       /* console.log(this.$refs.ul.children)
-        console.log(this.$refs.ul.clientHeight)*/
-          setTimeout(() => {
-            console.log(this.$refs.ul.children)
-            console.log(this.$refs.ul.clientHeight)
             this.siderbar.refresh();
             this.content.refresh();
             this._initScrollHeight();
           }, 0)
-        })
       }
     }
 	};

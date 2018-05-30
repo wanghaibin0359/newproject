@@ -62,13 +62,13 @@
       opacity: 1;
       transform: translate3d(0, 0, 0);
       transition: all 0.4s linear;
-      transform: rotate(0);
+      transform: rotate(180deg);
       &.move-enter-active, &.move-leave-active{
         transition: all 0.4s linear;
     }
       &.move-enter, &.move-leave-active{
         opacity: 0;
-        transform: translate3d(30px, 0, 0) rotate(-180deg);
+        transform: translate3d(30px, 0, 0) rotate(0);
 
       }
 

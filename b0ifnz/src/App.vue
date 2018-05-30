@@ -15,20 +15,22 @@
        </div>
     </div>
       <router-view ></router-view>
-    <div class="shopbar">
-
+    <div v-if="shopcartFlag" class="shopbar">
+      <shopcart ></shopcart>
     </div>
   </div>
 </template>
 <script>
 import headers from 'src/components/header/header';
 import allAction from 'src/common/allAction/allAction';
+import shopcart from 'src/components/shorpcart/shopcart';
  // const ERRORS = 0;
   export default {
     name: 'app',
-    components: { headers },
+    components: {headers, shopcart},
     data () {
       return {
+        shopcartFlag: false,
         getgoods: {},
         getsellers: {},
         getratings: {}
@@ -43,6 +45,7 @@ import allAction from 'src/common/allAction/allAction';
         self.getratings = self.$store.state.ratings = res[2].data;
          this.$nextTick(() => {
            this.$router.push('/goods');
+           this.shopcartFlag = true;
          })
       }).catch((rej) => {
         this.$openBox('商品请求报错！');
