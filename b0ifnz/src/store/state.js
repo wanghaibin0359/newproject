@@ -6,6 +6,7 @@
 */
 
 export default {
+  'el': '',
   'goods': {},
   'seller': {},
   'ratings': {},

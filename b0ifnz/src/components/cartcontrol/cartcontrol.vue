@@ -27,14 +27,26 @@
         }
       },
       methods: {
-        add () {
+        add (event) {
+          if (!event._constructed) {
+            return false;
+          }
           if (!this.foods.count) {
             Vue.set(this.foods, 'count', 1);
           } else {
             this.foods.count++;
           }
+          // this.$store.state.el = event.target;
+          this.$store.commit({
+            type: 'drop',
+            el: event.target,
+            vm: this
+          })
         },
-        decrease () {
+        decrease (event) {
+          if (!event._constructed) {
+            return false;
+          }
           this.foods.count--;
         }
       }
@@ -66,7 +78,7 @@
       &.move-enter-active, &.move-leave-active{
         transition: all 0.4s linear;
     }
-      &.move-enter, &.move-leave-active{
+      &.move-enter, &.move-leave-to{
         opacity: 0;
         transform: translate3d(30px, 0, 0) rotate(0);
 

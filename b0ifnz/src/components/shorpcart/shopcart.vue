@@ -13,6 +13,14 @@
       </span>
     </span>
     <span class="pay">{{pay}}</span>
+    <div class="ball-wrapper">
+      <div class="balls" v-for="ball in balls" >
+      <transition name="ball-animal" @before-enter="beforeDrop" @enter="droping" @after-enter="afterDrop">
+         <div class="ball"  v-show="ball.show">
+      </div>
+      </transition>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,7 +30,34 @@
         name: 'shopcart',
         data () {
           return {
-            allPrice: 0
+            allPrice: 0,
+            balls: [
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              },
+              {
+                show: false
+              }
+            ],
+            dropBalls: []
           }
         },
         computed: {
@@ -37,7 +72,6 @@
             self.allPrice = 0;
             let foodsAllCount = 0;
             // goods.foods.count
-            console.log(this.foods)
             this.foods.forEach((v, i) => {
                   v.foods.forEach((v, i) => {
                     if (v.count && v.count > 0) {
@@ -64,7 +98,65 @@
               return Strings
             }
           }
+        },
+      methods: {
+        drop (el) {
+            for (let i = 0; i < this.balls.length; i++) {
+              let item = this.balls[i];
+              if (!item.show) {
+                item.show = true;
+                item.el = el;
+                this.dropBalls.push(item);
+                return
+              }
+            }
+        },
+        beforeDrop (el) {
+          let lengths = this.balls.length;
+           /* for (let i = 0; i < this.balls.length; i++) {
+              let ball = this.balls[i];
+              console.log(ball)
+              if (ball.show) {
+                let rect = ball.el.getBoundingClientRect();
+                let x = rect.left - 32;
+                let y = -(window.innerHeight - rect.top - 22);
+                el.style.display = '';
+                el.style.webkitTransform = `translate3d(${x}px,${y}px,0)`;
+                el.style.transform = `translate3d(${x}px,${y}px,0)`;
+              }
+            }*/
+           while (lengths--) {
+             let ball = this.balls[lengths];
+             if (ball.show) {
+               let rect = ball.el.getBoundingClientRect();
+               let x = rect.left - 30;
+               let y = -(window.innerHeight - rect.top - 24);
+               el.style.display = '';
+               el.style.webkitTransform = `translate3d(${x}px,${y}px,0)`;
+               el.style.transform = `translate3d(${x}px,${y}px,0)`;
+             }
+           }
+        },
+        droping (el, done) {
+          /* eslint-disable no-unused-vars */
+          let rf = el.offsetLeft;
+         // this.$nextTick(() => {
+             el.addEventListener('transitionend', () => {
+               console.log('动画完成')
+               done()
+             });
+          el.style.webkitTransform = 'translate3d(0,0,0)';
+          el.style.transform = 'translate3d(0,0,0)';
+         // });
+        },
+        afterDrop (el) {
+          let ball = this.dropBalls.shift();
+          if (ball) {
+            ball.show = false;
+            el.style.display = 'none';
+          }
         }
+      }
       }
 </script>
 
@@ -105,7 +197,7 @@
             background-color:rgb(0,160,220);
            }
          }
-         
+
          .checkedFoods{
           border-radius: 10px;
             position:absolute;
@@ -154,6 +246,19 @@
       font-weight:700;
       color:rgb(255,255,255,.4);
       line-height: 46px;
+    }
+    .ball-wrapper{
+      .ball{
+        left: 32px;
+        bottom: 22px;
+        width:16px;
+        height:16px;
+        border-radius: 50%;
+        position: fixed;
+        background: rgb(0, 160, 220);
+        z-index: 200;
+        transition: all 2.4s cubic-bezier(.42,-0.74,.92,.55);
+      }
     }
   }
 </style>

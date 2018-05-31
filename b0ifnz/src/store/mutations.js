@@ -6,4 +6,9 @@
 */
 
 export default {
+  drop (state, el) {
+    console.log(1)
+    let root = el.vm.$root;
+    root.$children[0].$refs.shopcarts.drop(el.el)
+  }
 }

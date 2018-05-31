@@ -16,7 +16,7 @@
     </div>
       <router-view ></router-view>
     <div v-if="shopcartFlag" class="shopbar">
-      <shopcart ></shopcart>
+      <shopcart ref="shopcarts"></shopcart>
     </div>
   </div>
 </template>
