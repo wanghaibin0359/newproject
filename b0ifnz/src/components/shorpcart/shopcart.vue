@@ -17,7 +17,8 @@
       <div class="balls" v-for="ball in balls" >
       <transition name="ball-animal" @before-enter="beforeDrop" @enter="droping" @after-enter="afterDrop">
          <div class="ball"  v-show="ball.show">
-      </div>
+          <div class="inner inner-hook"></div>
+         </div>
       </transition>
       </div>
     </div>
@@ -132,22 +133,27 @@
                let x = rect.left - 30;
                let y = -(window.innerHeight - rect.top - 24);
                el.style.display = '';
-               el.style.webkitTransform = `translate3d(${x}px,${y}px,0)`;
-               el.style.transform = `translate3d(${x}px,${y}px,0)`;
+               el.style.webkitTransform = `translate3d(0px,${y}px,0)`;
+               el.style.transform = `translate3d(0px,${y}px,0)`;
+               let inner = el.getElementsByClassName('inner-hook')[0];
+                inner.style.webkitTransform = `translate3d(${x}px,0px,0)`;
+               inner.style.transform = `translate3d(${x}px,0px,0)`;
              }
            }
         },
         droping (el, done) {
           /* eslint-disable no-unused-vars */
           let rf = el.offsetLeft;
-         // this.$nextTick(() => {
+          this.$nextTick(() => {
              el.addEventListener('transitionend', () => {
-               console.log('动画完成')
                done()
              });
           el.style.webkitTransform = 'translate3d(0,0,0)';
           el.style.transform = 'translate3d(0,0,0)';
-         // });
+           let inner = el.getElementsByClassName('inner-hook')[0];
+            inner.style.webkitTransform = 'translate3d(0,0,0)';
+           inner.style.transform = 'translate3d(0,0,0)';
+          });
         },
         afterDrop (el) {
           let ball = this.dropBalls.shift();
@@ -251,13 +257,18 @@
       .ball{
         left: 32px;
         bottom: 22px;
-        width:16px;
-        height:16px;
-        border-radius: 50%;
+      
         position: fixed;
-        background: rgb(0, 160, 220);
+       
         z-index: 200;
-        transition: all 2.4s cubic-bezier(.42,-0.74,.92,.55);
+        transition: all 0.4s cubic-bezier(.42,-0.74,.92,.55);
+        .inner{
+            width:16px;
+            height:16px;
+            border-radius: 50%;
+            background: rgb(0, 160, 220);
+            transition: all 0.4s linear;
+        }
       }
     }
   }
