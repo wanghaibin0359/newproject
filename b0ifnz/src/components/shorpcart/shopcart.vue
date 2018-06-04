@@ -1,5 +1,6 @@
 <template>
-  <div class="wrap">
+<div>
+  <div class="wrap" @click="clickOpenShopCar">
     <span class="iconwrapper">
     <span class="icon">
         <span class="iconinner icon-shopping_cart" :class="{showfoonds:checkedFoods>0}"></span>
@@ -12,7 +13,7 @@
         <span class="dispatching">另需配送费￥{{seller.deliveryPrice}}元</span>
       </span>
     </span>
-    <span class="pay">{{pay}}</span>
+    <span class="pay" :class="{changepay:payfor}" @click.stop.prevent="payforfn()">{{pay}}</span>
     <div class="ball-wrapper">
       <div class="balls" v-for="ball in balls" >
       <transition name="ball-animal" @before-enter="beforeDrop" @enter="droping" @after-enter="afterDrop">
@@ -23,14 +24,42 @@
       </div>
     </div>
   </div>
+   <transition name="fade">
+        <div class="shopInfo" v-show="shopInfo">
+          <div class="title">
+          <span class="titlewarp">
+             <span class="shopcart">购物车</span>
+            <span class="clear" @click="clickClear">清空</span>
+          </span>
+           
+          </div>
+          <div class="wrapper">
+            <ul>
+              <li v-for="item in selectFoods">
+                <div class="content">
+                  <span class="names">{{item.name}}</span>
+                  <span class="price">￥{{item.price}}</span>
+                   <cartcontrol :foods="item"></cartcontrol>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
+      <div class="background" v-show="shopInfo" @click="shopcartHide"></div>
+  </div>
 </template>
 
 <script>
 // import Vue from 'vue';
+import cartcontrol from '../cartcontrol/cartcontrol.vue';
     export default {
+        components: {cartcontrol},
         name: 'shopcart',
         data () {
           return {
+            shopInfo: false, // 购物详情
+            payfor: false, // 是否结算
             allPrice: 0,
             balls: [
               {
@@ -58,7 +87,8 @@
                 show: false
               }
             ],
-            dropBalls: []
+            dropBalls: [],
+            selectFoods: []
           }
         },
         computed: {
@@ -70,12 +100,14 @@
           },
           checkedFoods () {
             let self = this;
+            self.selectFoods = [];
             self.allPrice = 0;
             let foodsAllCount = 0;
             // goods.foods.count
             this.foods.forEach((v, i) => {
                   v.foods.forEach((v, i) => {
                     if (v.count && v.count > 0) {
+                      self.selectFoods.push(v)
                       foodsAllCount += v.count;
                       self.allPrice += (v.price * v.count);
                     }
@@ -87,13 +119,16 @@
             // minPrice
             let Strings = '';
             if (this.checkedFoods === 0) {
+              this.payfor = false;
               Strings = '￥' + this.seller.minPrice + '起送';
               return Strings
             } else {
               let chajia = this.seller.minPrice - this.allPrice;
                 if (chajia > 0) {
+                  this.payfor = false;
                   Strings = '还差￥' + chajia + '起送';
                 } else {
+                  this.payfor = true;
                   Strings = '结算';
                 }
               return Strings
@@ -101,6 +136,30 @@
           }
         },
       methods: {
+        clickClear () {
+          this.selectFoods.forEach((v, i) => {
+              v.count = 0;
+          })
+        },
+        shopcartHide () {
+           this.shopInfo = false;
+         },
+        clickOpenShopCar () {
+            if (this.selectFoods.length > 0) {
+              this.shopInfo = !this.shopInfo;
+            } else {
+                this.shopInfo = false;
+            }
+          },
+        payforfn () {
+          if (!this.payfor) {
+              return false;
+          }
+       /*   this.$alert(`需要支付${this.allPrice + this.seller.deliveryPrice}`, '结算信息', {
+            dangerouslyUseHTMLString: '确定'
+          })*/
+          window.alert(`需要支付${this.allPrice + this.seller.deliveryPrice}`)
+        },
         drop (el) {
             for (let i = 0; i < this.balls.length; i++) {
               let item = this.balls[i];
@@ -114,18 +173,6 @@
         },
         beforeDrop (el) {
           let lengths = this.balls.length;
-           /* for (let i = 0; i < this.balls.length; i++) {
-              let ball = this.balls[i];
-              console.log(ball)
-              if (ball.show) {
-                let rect = ball.el.getBoundingClientRect();
-                let x = rect.left - 32;
-                let y = -(window.innerHeight - rect.top - 22);
-                el.style.display = '';
-                el.style.webkitTransform = `translate3d(${x}px,${y}px,0)`;
-                el.style.transform = `translate3d(${x}px,${y}px,0)`;
-              }
-            }*/
            while (lengths--) {
              let ball = this.balls[lengths];
              if (ball.show) {
@@ -162,13 +209,76 @@
             el.style.display = 'none';
           }
         }
+      },
+      watch: {
+        selectFoods () {
+          if (this.selectFoods.length === 0) {
+                this.shopInfo = false;
+          }
+        }
       }
       }
 </script>
 
 <style lang="less" scoped>
   @import '../../common/fonts/style.css';
+  @import '../../minxi/minix.less';
+  .background{
+    z-index: 297;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom: 0;
+    right: 0;
+    background-color:rgba(7,17,27,.6);
+  }
+  .shopInfo{
+      position:fixed;
+      bottom:46px;
+      left:0;
+      width:100%;
+      height:300px;
+      background-color: pink;
+      max-height:305px;
+      z-index:300;
+      &.fade-enter-active{
+      transition: all .5s;
+      }
+      &.fade-enter,&.fade-leave-active{
+        height: 0;
+        opacity: 0;
+        transition: all .5s;
+      }
+
+      .title{
+        position: relative;
+        width:100%;
+        height:40px;
+        background-color: #f3f5f7;
+        .titlewarp{
+          .border-1px(1px solid rgba(7, 17, 27, 0.1));
+            margin:0 18px;
+         .shopcart{
+            font-size:14px;
+            font-weight: 200;
+            line-height: 40px;
+          }
+          .clear{
+            margin-right: 18px;
+            display: inline-block;
+            float:right;
+             font-size:12px;
+            font-weight: 700;
+            color:rgb(0,160,220);
+            line-height: 40px;
+          }
+        }
+     
+      }
+    }
   .wrap{
+    position: relative;
+    z-index: 302;
     height: 100%;
     width:100%;
     display: flex;
@@ -177,10 +287,12 @@
       display: inline-block;
       vertical-align: middle;
     }
+    
     .iconwrapper{
       flex:0 0 80px;
        position: relative;
        .icon{
+        z-index: 400;
         position:absolute;
         padding:6px;
           left:15px;
@@ -222,10 +334,12 @@
     .content{
       flex:1;
       .totalprices{
-       margin:16px 0;
+        overflow: hidden;
+         margin:5px 0;
         .price{
-          padding-right: 12px;
-          border-right:1px solid rgba(255,255,255,.1);
+          display: block;
+          padding-right: 6px;
+          /* border-right:1px solid rgba(255,255,255,.1); */
           font-size: 14px;
           font-weight:700;
           color:rgba(255,255,255,.4);
@@ -233,7 +347,7 @@
 
         }
         .dispatching{
-          margin-left: 12px;
+          margin-left: 6px;
           font-size: 12px;
           font-weight:700;
           color:rgba(255,255,255,.4);
@@ -252,6 +366,9 @@
       font-weight:700;
       color:rgb(255,255,255,.4);
       line-height: 46px;
+      &.changepay{
+        background-color: rgb(85,16,100);
+      }
     }
     .ball-wrapper{
       .ball{

@@ -28,6 +28,7 @@
       },
       methods: {
         add (event) {
+            console.log('add')
           if (!event._constructed) {
             return false;
           }
