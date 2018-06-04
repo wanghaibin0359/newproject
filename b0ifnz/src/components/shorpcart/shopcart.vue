@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="wrap" @click="clickOpenShopCar">
+  <div class="wraps" @click="clickOpenShopCar">
     <span class="iconwrapper">
     <span class="icon">
         <span class="iconinner icon-shopping_cart" :class="{showfoonds:checkedFoods>0}"></span>
@@ -31,15 +31,16 @@
              <span class="shopcart">购物车</span>
             <span class="clear" @click="clickClear">清空</span>
           </span>
-           
           </div>
-          <div class="wrapper">
+          <div class="wrapper" ref="shopcarBall">
             <ul>
-              <li v-for="item in selectFoods">
+              <li class="food" v-for="item in selectFoods">
                 <div class="content">
                   <span class="names">{{item.name}}</span>
                   <span class="price">￥{{item.price}}</span>
+                  <div class="cartcontrol-wrapper">
                    <cartcontrol :foods="item"></cartcontrol>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -52,6 +53,7 @@
 
 <script>
 // import Vue from 'vue';
+import BScroll from 'better-scroll';
 import cartcontrol from '../cartcontrol/cartcontrol.vue';
     export default {
         components: {cartcontrol},
@@ -107,7 +109,7 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
             this.foods.forEach((v, i) => {
                   v.foods.forEach((v, i) => {
                     if (v.count && v.count > 0) {
-                      self.selectFoods.push(v)
+                      self.selectFoods.push(v);
                       foodsAllCount += v.count;
                       self.allPrice += (v.price * v.count);
                     }
@@ -147,6 +149,17 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
         clickOpenShopCar () {
             if (this.selectFoods.length > 0) {
               this.shopInfo = !this.shopInfo;
+              if (this.shopInfo) {
+                if (!this.shopScroll) {
+                  this.$nextTick(() => {
+                    this.batterScroll();
+                  })
+                } else {
+                  this.$nextTick(() => {
+                    this.shopScroll.refresh();
+                  })
+                }
+              }
             } else {
                 this.shopInfo = false;
             }
@@ -155,9 +168,6 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
           if (!this.payfor) {
               return false;
           }
-       /*   this.$alert(`需要支付${this.allPrice + this.seller.deliveryPrice}`, '结算信息', {
-            dangerouslyUseHTMLString: '确定'
-          })*/
           window.alert(`需要支付${this.allPrice + this.seller.deliveryPrice}`)
         },
         drop (el) {
@@ -208,6 +218,11 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
             ball.show = false;
             el.style.display = 'none';
           }
+        },
+        batterScroll () {
+          this.shopScroll = new BScroll(this.$refs.shopcarBall, {
+            click: true
+          });
         }
       },
       watch: {
@@ -224,7 +239,7 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
   @import '../../common/fonts/style.css';
   @import '../../minxi/minix.less';
   .background{
-    z-index: 297;
+    z-index:200;
     position:fixed;
     left:0;
     top:0;
@@ -233,23 +248,19 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
     background-color:rgba(7,17,27,.6);
   }
   .shopInfo{
-      position:fixed;
-      bottom:46px;
+      z-index:300;
+      position:absolute;
+      top:0;
       left:0;
       width:100%;
-      height:300px;
-      background-color: pink;
-      max-height:305px;
-      z-index:300;
-      &.fade-enter-active{
-      transition: all .5s;
+    background: #fff;
+      transform: translate3d(0,-100%,0);
+      &.fade-enter-active,&.fade-leave-active{
+       transition: all .5s;
       }
       &.fade-enter,&.fade-leave-active{
-        height: 0;
-        opacity: 0;
-        transition: all .5s;
+        transform: translate3d(0,0,0);
       }
-
       .title{
         position: relative;
         width:100%;
@@ -273,12 +284,45 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
             line-height: 40px;
           }
         }
-     
+
+      }
+      .wrapper{
+        max-height: 262px;
+       overflow: hidden;
+      }
+     .food{
+       background: #fff;
+       .border-1px(1px solid rgba(7, 17, 27, 0.1));
+        position: relative;
+       margin: 0 18px;
+       padding: 12px 0;
+        box-sizing: border-box;
+       .content{
+         .names{
+           line-height: 24px;
+           font-size: 14px;
+           color: rgb(7, 17, 27);
+         }
+         .price{
+           position: absolute;
+           right:68px;
+           bottom: 12px;
+           line-height: 24px;
+           font-size: 14px;
+           font-weight: 700;
+           color: rgb(240, 20, 20);
+         }
+         .cartcontrol-wrapper{
+           position: absolute;
+           right: 0;
+           bottom: 12px;
+         }
+       }
       }
     }
-  .wrap{
+  .wraps{
+    z-index: 350;
     position: relative;
-    z-index: 302;
     height: 100%;
     width:100%;
     display: flex;
@@ -287,12 +331,11 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
       display: inline-block;
       vertical-align: middle;
     }
-    
+
     .iconwrapper{
       flex:0 0 80px;
        position: relative;
        .icon{
-        z-index: 400;
         position:absolute;
         padding:6px;
           left:15px;
@@ -374,9 +417,9 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
       .ball{
         left: 32px;
         bottom: 22px;
-      
+
         position: fixed;
-       
+
         z-index: 200;
         transition: all 0.4s cubic-bezier(.42,-0.74,.92,.55);
         .inner{

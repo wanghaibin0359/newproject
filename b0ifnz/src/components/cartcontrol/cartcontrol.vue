@@ -57,9 +57,7 @@
 <style lang="less" scoped>
   @import '../../common/fonts/style.css';
   .wrap{
-
     span{
-
       display: inline-block;
       vertical-align: top;
       font-size:24px;
@@ -82,9 +80,7 @@
       &.move-enter, &.move-leave-to{
         opacity: 0;
         transform: translate3d(30px, 0, 0) rotate(0);
-
       }
-
     }
 
   }
