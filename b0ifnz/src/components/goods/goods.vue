@@ -7,7 +7,6 @@
           <span v-if="item.type !==-1" class="icons"><lable   	:datas="item.type" :size='3'></lable></span>
            {{item.name}}
         </span>
-
       </li>
     </ul>
   </div>
@@ -17,7 +16,7 @@
           <div class="titleName"><span>{{item.name}}</span></div>
           <div class="foods">
             <ul>
-              <li v-for="i in item.foods" class='foodlis'>
+              <li v-for="i in item.foods" class='foodlis' @click="showFoodInfo(i,$event)">
                 <div class="content">
                   <div class="img">
                     <img :src="i.icon" alt="" width="57" height="57">
@@ -26,7 +25,7 @@
                     <h2 class="title">{{i.name}}</h2>
                     <div class="description">{{i.description}}</div>
                     <div class="sellAndRating">
-                      <span class="sellCount">月售{{i.sellCount}}份</span><span class="sellCount">好评率{{i.sellCount}}</span>
+                      <span class="sellCount">月售{{i.sellCount}}份</span><span class="sellCount">好评率{{i.rating}}%</span>
                     </div>
                     <div class="priceall">
                       <span class="now">￥{{i.price}}</span>
@@ -42,8 +41,12 @@
           </div>
         </li>
       </ul>
-
   </div>
+  <transition name="infofood">
+  <!--   <div class="infoFoods" > -->
+      <food-info v-if="curntfoodShow" :food='curntFood' @hide="hideFoodInfo"></food-info>
+   <!--  </div> -->
+  </transition>
 </div>
 
 </template>
@@ -51,12 +54,15 @@
   import BScroll from 'better-scroll';
   import lable from '../label/lable.vue';
   import cartcontrol from '../cartcontrol/cartcontrol.vue';
+  import foodInfo from '../foodInfo/foodInfo.vue';
 //  const ERRORS = 0;
 	export default {
-    components: {lable, cartcontrol},
+    components: {lable, cartcontrol, foodInfo},
 		name: 'goods',
     data () {
       return {
+        curntfoodShow: false,
+        curntFood: {},
         currentIndex: 0,
         foodsList: [],
         curentY: 0,
@@ -71,6 +77,16 @@
     created () {
     },
     methods: {
+      showFoodInfo (food, event) {
+        if (!event._constructed) {
+          return false;
+        }
+        this.curntFood = food;
+        this.curntfoodShow = true;
+      },
+      hideFoodInfo () {
+        this.curntfoodShow = false;
+      },
       selectMenu (index, event) {
         if (!event._constructed) {
           return
@@ -146,6 +162,24 @@
     top:174px;
     bottom:46px;
     overflow: hidden;
+    /* .infoFoods{
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      z-index:100;
+      background-color: pink;
+      min-height:100%;
+      opacity: 1;
+      transform:translate3d(0,0,0);
+      &.infofood-enter-active,&.infofood-leave-active{
+       transition: all .5s;
+      }
+      &.infofood-enter,&.infofood-leave-active{
+        opacity: 0;
+        transform: translate3d(100%,0,0);
+      }
+    } */
     .siderbar{
       box-sizing: border-box;
       width:80px;

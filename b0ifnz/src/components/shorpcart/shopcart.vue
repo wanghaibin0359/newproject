@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="shopcart">
   <div class="wraps" @click="clickOpenShopCar">
     <span class="iconwrapper">
     <span class="icon">
@@ -37,7 +37,7 @@
               <li class="food" v-for="item in selectFoods">
                 <div class="content">
                   <span class="names">{{item.name}}</span>
-                  <span class="price">￥{{item.price}}</span>
+                  <span class="price">￥{{item.price*item.count}}</span>
                   <div class="cartcontrol-wrapper">
                    <cartcontrol :foods="item"></cartcontrol>
                   </div>
@@ -46,7 +46,7 @@
             </ul>
           </div>
         </div>
-      </transition>
+   </transition>
       <div class="background" v-show="shopInfo" @click="shopcartHide"></div>
   </div>
 </template>

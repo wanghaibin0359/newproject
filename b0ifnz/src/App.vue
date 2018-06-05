@@ -123,7 +123,8 @@ import shopcart from 'src/components/shorpcart/shopcart';
     }
 
     .shopbar{
-      position: absolute;
+      position: fixed;
+      z-index: 300;
       bottom:0;
       height:46px;
       background-color:red;

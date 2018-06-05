@@ -155,7 +155,7 @@ import {getStarArray} from 'src/common/util/computedStar';
      /* overflow: auto;*/
       top:0;
       left:0;
-      z-index: 100;
+      z-index: 500;
       width:100%;
       height: 100%;
       &.fade-enter-active{
