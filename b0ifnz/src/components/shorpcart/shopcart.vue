@@ -47,7 +47,9 @@
           </div>
         </div>
    </transition>
+  <transition name="bgc">
       <div class="background" v-show="shopInfo" @click="shopcartHide"></div>
+  </transition>
   </div>
 </template>
 
@@ -246,6 +248,12 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
     bottom: 0;
     right: 0;
     background-color:rgba(7,17,27,.6);
+    &.bgc-enter-active,&.bgc-leave-active{
+      transition:all .4s linear;
+    }
+    &.bgc-enter,&.bgc-leave-to{
+      background-color:rgba(7,17,27,0);
+    }
   }
   .shopInfo{
       z-index:300;

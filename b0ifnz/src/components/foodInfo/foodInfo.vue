@@ -1,8 +1,12 @@
 <template>
 <div class="foodInfo" ref='wrap'>
   <div class="wrapper">
-    <button @click='clickHide'>撤退</button>
-    <img class="img" :src="food.image" alt="" width='100%' height="375"id="img">
+    <div class="img" id="img">
+      <img class="imginfo" :src="food.image" alt=""  >
+      <div class="back" @click="clickHide">
+        <i class="icon-arrow_lift"></i>
+      </div>
+    </div>
     <div class="title">
       <h1 class="name">{{food.name}}</h1>
       <div class="info">
@@ -27,8 +31,20 @@
      <div class="banner"></div>
      <div class="rating">
        <h1 class="titles">商品评价</h1>
-
+       <rating-select></rating-select>
      </div>
+    <div class="ratingInf">
+      <ul>
+        <li v-for="item in food.ratings">
+          <div class="time">{{item.rateTime | formDate}}</div>
+          <div class="ratingIcon"><span class="icon"></span><span class="content">{{item.text}}</span></div>
+          <div class="personId">
+            <span class="uuids">{{item.username}}</span>
+            <span class="head"><img :src="item.avatar" alt="" width="12" height="12"></span>
+          </div>
+        </li>
+      </ul>
+    </div>
      <div class="empty"></div>
   </div>
 </div>
@@ -39,9 +55,11 @@
 // import BScroll from 'better-scroll';
 // import lable from '../label/lable.vue';
  import cartcontrol from '../cartcontrol/cartcontrol.vue';
+ import ratingSelect from '../ratingSelect/ratingSelect.vue';
+ import {formatDate} from '../../common/js/date';
 //  const ERRORS = 0;
 	export default {
-    components: {cartcontrol},
+    components: {cartcontrol, ratingSelect},
 		name: 'foodInfo',
     props: {
       food: {
@@ -72,20 +90,18 @@
          this.wrapper.refresh();
       })
     },
-    watch: {
-     /* food () {
-         this.$nextTick(() => {
-          this.wrapper.refresh();
-          // this.wrapper.scrollTo(0, 0, 100, 'linear');
-        })
-      }*/
+    filters: {
+      formDate (time) {
+        let date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd hh:mm');
+      }
     }
    }
 </script>
 <style lang="less" scoped>
+  @import '../../common/fonts/style.css';
   @import '../../minxi/minix.less';
   .foodInfo{
-
       overflow: hidden;
       position: fixed;
       top:0;
@@ -102,11 +118,35 @@
       &.infofood-enter,&.infofood-leave-active{
         opacity: 0;
         transform: translate3d(100%,0,0);
-       
+
       }
+    .img{
+      position: relative;
+      width:100%;
+      padding-top:100%;
+      height: 0;
+      .imginfo{
+        position: absolute;
+        left:0;
+        top:0;
+        width: 100%;
+        height: 100%;
+      }
+      .back{
+        position: absolute;
+        top: 10px;
+        left: 0;
+        .icon-arrow_lift{
+          display: block;
+          padding: 10px;
+          font-size: 20px;
+          color: #fff;
+        }
+      }
+    }
       .empty{
         width:100%;
-        height: 46px;
+        height: 50px;
       }
       .title{
         position: relative;
@@ -185,6 +225,11 @@
           color:rgb(77,85,93);
           line-height: 24px;
         }
+      }
+      .rating{
+        position: relative;
+        padding:18px;
+        .border-1px(1px solid rgba(7, 17, 27, 0.1));
       }
     }
 </style>
