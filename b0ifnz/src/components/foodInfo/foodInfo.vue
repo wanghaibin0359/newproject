@@ -11,8 +11,6 @@
       <h1 class="name">{{food.name}}</h1>
       <div class="info">
        <span class="sellCount">月售{{food.sellCount}}份</span><span class="sellCount">好评率{{food.sellCount}}%</span>
-       <!--  <span class="sellCount">{{food.sellCount}}</span>
-       <span class="rating">{{food.rating}}</span> -->
       </div>
       <div class="priceall">
         <span class="now">￥{{food.price}}</span>
@@ -31,22 +29,23 @@
      <div class="banner"></div>
      <div class="rating">
        <h1 class="titles">商品评价</h1>
-       <rating-select></rating-select>
+       <rating-select  :desc="desc" :select-type="selectType" :ratings="food.ratings"></rating-select>
      </div>
     <div class="ratingInf">
-      <ul>
-        <li v-for="item in food.ratings">
+      <ul v-if="food.ratings.length>0">
+        <li class="item" v-for="item in food.ratings">
           <div class="time">{{item.rateTime | formDate}}</div>
-          <div class="ratingIcon"><span class="icon"></span><span class="content">{{item.text}}</span></div>
           <div class="personId">
             <span class="uuids">{{item.username}}</span>
             <span class="head"><img :src="item.avatar" alt="" width="12" height="12"></span>
           </div>
+          <div class="ratingIcon"><span class="icon"></span><span class="content">{{item.text}}</span></div>
         </li>
       </ul>
+      <div class="no-rating" v-else>暂无评价</div>
     </div>
      <div class="empty"></div>
-  </div>
+    </div>
 </div>
 </template>
 <script>
@@ -58,9 +57,20 @@
  import ratingSelect from '../ratingSelect/ratingSelect.vue';
  import {formatDate} from '../../common/js/date';
 //  const ERRORS = 0;
+  const ALL = 2;
 	export default {
     components: {cartcontrol, ratingSelect},
 		name: 'foodInfo',
+    data () {
+      return {
+        desc: {
+          all: '全部',
+          positive: '推荐',
+          negative: '吐槽'
+        },
+        selectType: ALL
+      }
+    },
     props: {
       food: {
         type: Object
@@ -108,7 +118,7 @@
       left:0;
       width:100%;
       z-index:100;
-      background-color: pink;
+      background-color: white;
       height:100%;
       opacity: 1;
       transform:translate3d(0,0,0);
@@ -120,7 +130,7 @@
         transform: translate3d(100%,0,0);
 
       }
-    .img{
+      .img{
       position: relative;
       width:100%;
       padding-top:100%;
@@ -179,7 +189,7 @@
              color: rgb(147, 153, 159);
            }
          }
-         .cartcontrol{
+        .cartcontrol{
          position: absolute;
           right: 18px;
           bottom:18px;
@@ -229,7 +239,53 @@
       .rating{
         position: relative;
         padding:18px;
+        .titles{
+          margin-bottom:18px;
+        }
         .border-1px(1px solid rgba(7, 17, 27, 0.1));
+        .no-rating{
+          padding: 16px 0;
+          font-size: 12px;
+          color: rgb(147, 153, 159);
+        }
+
       }
+    .ratingInf{
+      padding:0 18px;
+      .item{
+        position:relative;
+        padding:16px 0;
+        .border-1px(1px solid rgba(7, 17, 27, 0.1));
+        .time{
+          line-height: 12px;
+          font-size: 10px;
+          color: rgb(147, 153, 159);
+          margin-bottom: 6px;
+        }
+        .personId{
+          position:absolute;
+          right:0;
+          top:16px;
+          .head,.uuids{
+            display:inline-block;
+            vertical-align: top;
+          }
+          .uuids{
+            font-size: 10px;
+            color: rgb(147, 153, 159);
+          }
+          .head{
+            overflow: hidden;
+            border-radius: 50%;
+            margin: 0 12px 0 0;
+          }
+        }
+        .ratingIcon{
+          line-height: 16px;
+          font-size: 12px;
+          color: rgb(7, 17, 27);
+        }
+      }
+    }
     }
 </style>
