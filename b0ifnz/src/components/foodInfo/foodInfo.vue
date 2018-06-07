@@ -29,17 +29,17 @@
      <div class="banner"></div>
      <div class="rating">
        <h1 class="titles">商品评价</h1>
-       <rating-select  :desc="desc" :select-type="selectType" :ratings="food.ratings"></rating-select>
+       <rating-select  :desc="desc" :select-type="selectType" :content-type="contentType" :ratings="food.ratings" @select="changeSelectType" @onlycontent="onlyContentType"></rating-select>
      </div>
     <div class="ratingInf">
       <ul v-if="food.ratings.length>0">
-        <li class="item" v-for="item in food.ratings">
+        <li class="item" v-show="needShow(item.rateType, item.text)" v-for="item in food.ratings">
           <div class="time">{{item.rateTime | formDate}}</div>
           <div class="personId">
             <span class="uuids">{{item.username}}</span>
             <span class="head"><img :src="item.avatar" alt="" width="12" height="12"></span>
           </div>
-          <div class="ratingIcon"><span class="icon"></span><span class="content">{{item.text}}</span></div>
+          <div class="ratingIcon"><span class="icon" :class="iconClass(item.rateType)"></span><span class="content">{{item.text}}</span></div>
         </li>
       </ul>
       <div class="no-rating" v-else>暂无评价</div>
@@ -68,7 +68,8 @@
           positive: '推荐',
           negative: '吐槽'
         },
-        selectType: ALL
+        selectType: ALL,
+        contentType: false
       }
     },
     props: {
@@ -80,6 +81,10 @@
       clickHide () {
         this.$emit('hide');
       },
+      iconClass (type) {
+        let arr = [{'icon-thumb_up': type === 0}, {'icon-thumb_down': type === 1}];
+        return arr
+      },
       add (event) {
         if (!event._constructed) {
             return false;
@@ -89,6 +94,36 @@
           } else {
             this.food.count++;
           }
+      },
+      needShow (type, text) {
+        if (this.contentType) {
+          if (!text) {
+            return false
+          } else {
+            if (this.selectType !== ALL) {
+              return type === this.selectType
+            } else {
+              return true
+            }
+          }
+        }
+        if (this.selectType !== ALL) {
+            return type === this.selectType
+        } else {
+          return true
+        }
+      },
+      changeSelectType (type) {
+        this.selectType = type;
+        this.$nextTick(() => {
+          this.wrapper.refresh();
+        })
+      },
+      onlyContentType () {
+        this.contentType = !this.contentType;
+        this.$nextTick(() => {
+          this.wrapper.refresh();
+        })
       }
     },
     mounted () {
@@ -284,6 +319,17 @@
           line-height: 16px;
           font-size: 12px;
           color: rgb(7, 17, 27);
+          .icon-thumb_up, .icon-thumb_down{
+            margin-right: 4px;
+            line-height: 16px;
+            font-size: 12px;
+          }
+          .icon-thumb_up{
+            color: rgb(0, 160, 220);
+          }
+          .icon-thumb_down{
+            color: rgb(147, 153, 159);
+          }
         }
       }
     }
