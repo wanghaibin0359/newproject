@@ -35,7 +35,7 @@
           } else {
             this.foods.count++;
           }
-           if (this.$parent.$el.id !== 'shopcart') {
+           if (this.$parent.$options.name !== 'shopcart') {
               this.$store.commit({
                 type: 'drop',
                 el: event.target,
