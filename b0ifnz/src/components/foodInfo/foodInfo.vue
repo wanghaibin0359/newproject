@@ -51,8 +51,6 @@
 <script>
   import Vue from 'vue';
   import BScroll from 'better-scroll';
-// import BScroll from 'better-scroll';
-// import lable from '../label/lable.vue';
  import cartcontrol from '../cartcontrol/cartcontrol.vue';
  import ratingSelect from '../ratingSelect/ratingSelect.vue';
  import {formatDate} from '../../common/js/date';
@@ -241,7 +239,7 @@
       }
       .banner{
         position: relative;
-        width:100;
+        width:100%;
         height: 16px;
         background-color: #f3f5f7;
         &::before{
