@@ -11,7 +11,8 @@
         <router-link to='ratings' tag="a">评价</router-link>
        </div>
        <div class="tab-item">
-        <router-link to='seller' tag="a">商家</router-link>
+       <router-link :to={name:'sellers',params:{id:ids}} tag="a">商家</router-link>
+       <!--  <router-link :to={path:`seller/${ids}`} tag="a">商家</router-link>-->
        </div>
     </div>
       <router-view ></router-view>
@@ -24,12 +25,17 @@
 import headers from 'src/components/header/header';
 import allAction from 'src/common/allAction/allAction';
 import shopcart from 'src/components/shorpcart/shopcart';
+import {urlParse} from 'src/common/util/urlParse';
  // const ERRORS = 0;
   export default {
     name: 'app',
     components: {headers, shopcart},
     data () {
       return {
+        ids: (() => {
+          let params = urlParse()['id'];
+          return params
+        })(),
         shopcartFlag: false,
         getgoods: {},
         getsellers: {},
@@ -72,10 +78,8 @@ import shopcart from 'src/components/shorpcart/shopcart';
       getgoods (news) {
       },
       getsellers (news) {
-
       },
       getratings (news) {
-
       }
     },
     methods: {
@@ -114,7 +118,7 @@ import shopcart from 'src/components/shorpcart/shopcart';
         line-height: 28px;
         font-size: 14px;
         color:@click;
-        &.router-link-active{
+        &.active{
           color:@no-click;
           }
        }
