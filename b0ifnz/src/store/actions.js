@@ -6,5 +6,8 @@
 */
 
 export default {
+  test (context) {
+    console.log(context);
+  }
 }
 

@@ -96,6 +96,12 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
           }
         },
         computed: {
+          isDrp () {
+            return this.$store.state.isDrop;
+          },
+          propEle () {
+            return this.$store.state.dropPropEle;
+          },
           foods () {
             return this.$store.state.goods
           },
@@ -173,15 +179,15 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
           window.alert(`需要支付${this.allPrice + this.seller.deliveryPrice}`)
         },
         drop (el) {
-            for (let i = 0; i < this.balls.length; i++) {
-              let item = this.balls[i];
-              if (!item.show) {
-                item.show = true;
-                item.el = el;
-                this.dropBalls.push(item);
-                return
-              }
+          for (let i = 0; i < this.balls.length; i++) {
+            let item = this.balls[i];
+            if (!item.show) {
+              item.show = true;
+              item.el = el;
+              this.dropBalls.push(item);
+              return
             }
+          }
         },
         beforeDrop (el) {
           let lengths = this.balls.length;
@@ -207,11 +213,11 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
              el.addEventListener('transitionend', () => {
                done()
              });
-          el.style.webkitTransform = 'translate3d(0,0,0)';
-          el.style.transform = 'translate3d(0,0,0)';
-           let inner = el.getElementsByClassName('inner-hook')[0];
-            inner.style.webkitTransform = 'translate3d(0,0,0)';
-           inner.style.transform = 'translate3d(0,0,0)';
+            el.style.webkitTransform = 'translate3d(0,0,0)';
+            el.style.transform = 'translate3d(0,0,0)';
+             let inner = el.getElementsByClassName('inner-hook')[0];
+              inner.style.webkitTransform = 'translate3d(0,0,0)';
+             inner.style.transform = 'translate3d(0,0,0)';
           });
         },
         afterDrop (el) {
@@ -232,6 +238,12 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue';
           if (this.selectFoods.length === 0) {
                 this.shopInfo = false;
           }
+        },
+        isDrp () {
+          this.$nextTick(() => {
+            this.drop(this.propEle);
+          })
+          this.$store.dispatch('test');
         }
       }
       }

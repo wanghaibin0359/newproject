@@ -7,7 +7,9 @@
 
 export default {
   drop (state, el) {
-    let root = el.vm.$root;
-    root.$children[0].$refs.shopcarts.drop(el.el)
+    state.isDrop++;
+    state.dropPropEle = el.el;
+   /* let root = el.vm.$root;
+    root.$children[0].$refs.shopcarts.drop(el.el)*/
   }
 }

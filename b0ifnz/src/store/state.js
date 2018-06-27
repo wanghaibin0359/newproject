@@ -6,6 +6,8 @@
 */
 
 export default {
+  'isDrop': 0,
+  'dropPropEle': '',
   'el': '',
   'goods': {},
   'seller': {},
