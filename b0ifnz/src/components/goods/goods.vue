@@ -116,12 +116,7 @@
       }
     },
     mounted () {
-      let self = this;
-      /* this.$nextTick(() => {
-        this.siderbar.refresh();
-        this.content.refresh();
-        this._initScrollHeight();
-      })*/
+       let self = this;
         this.siderbar = new BScroll(this.$refs.siders, {
           click: true,
           startY: 0
@@ -135,19 +130,25 @@
         this.content.on('scroll', (pop) => {
           this.curentY = Math.abs(pop.y);
           this.nextIndex = this.scrollcoent();
-          self.$nextTick(() => {
-           // this.siderbar.refresh();
-            this.currentIndex = this.nextIndex;
+          this.currentIndex = this.nextIndex;
+           self.$nextTick(() => {
+            // this.siderbar.refresh();
             this.siderbar.scrollToElement(this.$refs.foodslist[this.currentIndex]);
+            // this.siderbar.refresh();
           })
         })
+      /* this.$nextTick().then(() => {
+        this._initScrollHeight();
+      })*/
+      this.$nextTick(() => {
+        this._initScrollHeight();
+      })
     },
     watch: {
       foods(news, old) {
         this.$nextTick().then(() => {
             this.siderbar.refresh();
             this.content.refresh();
-            this._initScrollHeight();
           }, 0)
       }
     }

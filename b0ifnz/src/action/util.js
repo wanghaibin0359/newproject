@@ -32,8 +32,8 @@ let openBox = function (alert) {
 	})
 }
 export default {
-	install: function(ss) {
-		ss.prototype.$ajax = ajax;
-		ss.prototype.$openBox = openBox;
+	install: function(Vue) {
+    Vue.prototype.$ajax = ajax;
+    Vue.prototype.$openBox = openBox;
 	}
 }
