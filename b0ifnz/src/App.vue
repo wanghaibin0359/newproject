@@ -15,7 +15,10 @@
        <!--  <router-link :to={path:`seller/${ids}`} tag="a">商家</router-link>-->
        </div>
     </div>
-      <router-view ></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
     <div v-if="shopcartFlag" class="shopbar">
       <shopcart ref="shopcarts"></shopcart>
     </div>

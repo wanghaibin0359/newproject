@@ -75,6 +75,10 @@
       }
     },
     created () {
+      console.log('触发几次')
+    },
+    activated () {
+      console.log('11111触发几次')
     },
     methods: {
       showFoodInfo (food, event) {

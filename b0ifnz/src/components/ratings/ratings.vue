@@ -128,6 +128,7 @@
       }
     },
     created () {
+      console.log('ratings')
       this.ratings = this.$store.state.ratings;
       this.seller = this.$store.state.seller;
     },

@@ -11,16 +11,25 @@
 const router = {
 	mode: 'history',
 	routes: [
-		{	path: '/goods',
+		{ meta: {
+        keepAlive: true
+      },
+      path: '/goods',
 			component: (resolve) => require(['src/components/goods/goods'], resolve)
 		},
-		{path: '/ratings',
+		{ meta: {
+        keepAlive: false
+      },
+      path: '/ratings',
 			component: (resolve) => require(['src/components/ratings/ratings'], resolve)
 		},
-		{path: '/seller',
+		{ meta: {
+        keepAlive: false
+      },
+      path: '/seller',
 			component: (resolve) => require(['src/components/seller/seller'], resolve),
       name: 'sellers'
 		}],
-  linkActiveClass: 'active'
+    linkActiveClass: 'active'
 	}
 export default router;
