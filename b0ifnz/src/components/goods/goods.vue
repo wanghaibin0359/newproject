@@ -48,7 +48,6 @@
    <!--  </div> -->
   </transition>
 </div>
-
 </template>
 <script>
   import BScroll from 'better-scroll';
@@ -75,10 +74,8 @@
       }
     },
     created () {
-      console.log('触发几次')
     },
     activated () {
-      console.log('11111触发几次')
     },
     methods: {
       showFoodInfo (food, event) {
@@ -147,14 +144,6 @@
       this.$nextTick(() => {
         this._initScrollHeight();
       })
-    },
-    watch: {
-      foods(news, old) {
-        this.$nextTick().then(() => {
-            this.siderbar.refresh();
-            this.content.refresh();
-          }, 0)
-      }
     }
 	};
 </script>

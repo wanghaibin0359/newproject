@@ -26,7 +26,7 @@
 </template>
 <script>
 import headers from 'src/components/header/header';
-import allAction from 'src/common/allAction/allAction';
+// import allAction from 'src/common/allAction/allAction';
 import shopcart from 'src/components/shorpcart/shopcart';
 import {urlParse} from 'src/common/util/urlParse';
  // const ERRORS = 0;
@@ -40,14 +40,26 @@ import {urlParse} from 'src/common/util/urlParse';
           return params
         })(),
         shopcartFlag: false,
-        getgoods: {},
-        getsellers: {},
         getratings: {}
+      }
+    },
+    computed: {
+      getsellers () {
+        return this.$store.state.seller;
       }
     },
     created () {
       let self = this;
-      allAction(this.goods(), this.sellers(), this.ratings())
+      this.$store.dispatch('asyncGetGoods').then((state) => {
+        self.$nextTick(() => {
+          this.$router.push('/goods');
+          this.shopcartFlag = true;
+        })
+      });
+      this.$store.dispatch('asyncGetSeller').then((datas) => {
+        //   console.log(datas)
+      })
+     /* allAction(this.goods(), this.sellers(), this.ratings())
        .then((res) => {
         self.getgoods = self.$store.state.goods = res[0].data;
         self.getsellers = self.$store.state.seller = res[1].data;
@@ -58,7 +70,7 @@ import {urlParse} from 'src/common/util/urlParse';
          })
       }).catch((rej) => {
         this.$openBox('商品请求报错！');
-      });
+      });*/
       /* this.$ajax.all([this.goods(), this.sellers(), this.ratings()])
       .then(this.$ajax.spread(function (acct, perms) {
           console.log(acct)
@@ -77,24 +89,7 @@ import {urlParse} from 'src/common/util/urlParse';
     mounted () {
       console.log(window.devicePixelRatio)
     },
-    watch: {
-      getgoods (news) {
-      },
-      getsellers (news) {
-      },
-      getratings (news) {
-      }
-    },
     methods: {
-      goods () {
-        return this.$ajax.get('/goods')
-      },
-      sellers () {
-         return this.$ajax.get('/seller')
-      },
-       ratings () {
-         return this.$ajax.get('/ratings')
-      }
     }
   }
 </script>
