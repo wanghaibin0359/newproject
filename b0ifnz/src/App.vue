@@ -14,6 +14,7 @@
        <router-link :to={name:'sellers',params:{id:ids}} tag="a">商家</router-link>
        <!--  <router-link :to={path:`seller/${ids}`} tag="a">商家</router-link>-->
        </div>
+       <div class="underline"></div>
     </div>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -121,7 +122,19 @@ import {urlParse} from 'src/common/util/urlParse';
           }
        }
      }
-
+    /*  &:after{
+        content:'';
+        width:100%;
+      }*/
+     .underline{
+       z-index: 100;
+       position:absolute;
+       width:20px;
+       height: 2px;
+       left: 0;
+       bottom:0;
+       background-color: red;
+     }
     }
 
     .shopbar{
