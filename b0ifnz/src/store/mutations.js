@@ -11,5 +11,14 @@ export default {
     state.dropPropEle = el.el;
    /* let root = el.vm.$root;
     root.$children[0].$refs.shopcarts.drop(el.el)*/
+  },
+  setGoods (state, props) {
+      state.goods = props;
+  },
+  setSeller (state, props) {
+    state.seller = props;
+  },
+  setRating (state, props) {
+    state.ratings = props;
   }
 }

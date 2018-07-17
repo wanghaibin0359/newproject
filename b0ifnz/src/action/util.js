@@ -37,3 +37,4 @@ export default {
     Vue.prototype.$openBox = openBox;
 	}
 }
+export {ajax}

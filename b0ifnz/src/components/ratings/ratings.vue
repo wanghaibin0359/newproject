@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings"  ref="ratings">
+  <div v-if="seller" class="ratings"  ref="ratings">
     <div class="wrapper">
       <div class="grade">
       <div class="left">
@@ -30,7 +30,7 @@
     </div>
       <div class="banner"></div>
       <div class="ratingControl">
-         <rating-select  :select-type="selectType" :content-type="contentType" :ratings="ratings" @select="changeSelectType" @onlycontent="onlyContentType"></rating-select>
+         <rating-select v-if="ratings.length>0" :select-type="selectType" :content-type="contentType" :ratings="ratings" @select="changeSelectType" @onlycontent="onlyContentType"></rating-select>
     </div>
       <div class="banner"></div>
       <div class="ratingInf">
@@ -75,8 +75,6 @@
 		name: 'ratings',
     data () {
       return {
-        ratings: {},
-        seller: {},
         selectType: ALL,
         contentType: false
       }
@@ -85,6 +83,12 @@
       starArray () {
         let ss = getStarArray(STARCOUNT, STARSIZE, this.seller.score);
         return ss
+      },
+      ratings () {
+        return this.$store.state.ratings;
+      },
+      seller() {
+        return this.$store.state.seller;
       }
     },
     methods: {
@@ -128,18 +132,14 @@
       }
     },
     created () {
-      console.log('ratings')
-      this.ratings = this.$store.state.ratings;
-      this.seller = this.$store.state.seller;
+      this.$store.dispatch('asyncGetRating').then((datas) => {
+        this.wrapper.refresh();
+      })
     },
     mounted () {
-      // this.ratings = this.$store.state.ratings;
       this.wrapper = new BScroll(this.$refs.ratings, {
         click: true,
         startY: 0
-      })
-      this.$nextTick(() => {
-        this.wrapper.refresh();
       })
     },
     filters: {

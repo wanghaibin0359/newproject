@@ -83,7 +83,6 @@
 		name: 'seller',
     data () {
       return {
-        sellers: {},
         ids: this.$route.params.id,
         favorite: (() => {
             return getStore(this.$route.params.id, 'favorite', false)
@@ -93,10 +92,12 @@
     computed: {
       favoriteText () {
         return this.favorite ? '已收藏' : '收藏'
+      },
+      sellers () {
+        return this.$store.state.seller;
       }
     },
     mounted () {
-      this.sellers = this.$store.state.seller;
       this.$nextTick(() => {
         this.sroll = new BScroll(this.$refs.seller, {
           click: true,
